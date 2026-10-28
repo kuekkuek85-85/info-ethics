@@ -25,6 +25,23 @@ React (Vite) · Google Gemini API · Firebase Firestore · Vercel · GitHub
 | 7. 코드 리뷰 | AI 1차 + 사람 2차 |
 | 8. 피드백 반영 + 배포 | spec/CLAUDE.md 교정 → Vercel |
 
+## 환경변수 (API 키) 설정 — 외부 서비스 태스크 전 필수
+
+태스크 B(Gemini)·C(Firebase)는 **코드 작성 전에 키 발급·설정 단계**를 먼저 거친다.
+키는 **코드에 하드코딩·채팅/공유문서에 붙여넣기 금지**(CLAUDE.md 보안). `.env`에만 둔다.
+
+1. **발급**
+   - Gemini: Google AI Studio에서 API 키 생성 (태스크 B)
+   - Firebase: 콘솔에서 프로젝트 생성 → 웹 앱 등록 → 설정값 확보 (태스크 C)
+2. **설정**: 루트에 `.env` 생성, `.env.example`을 복사해 값 채우기
+   ```
+   cp .env.example .env
+   # .env 안의 VITE_GEMINI_API_KEY=... 등에 발급받은 값 입력
+   ```
+3. **확인**: `.env`가 `.gitignore`에 포함돼 커밋되지 않는지 확인 → 앱 재시작
+
+> `.env`가 없거나 키가 비면 해당 기능은 "키 미설정" 안내로 처리된다(앱이 죽지 않음).
+
 ## 하네스 파일
 - **`CLAUDE.md`** — Claude Code가 세션마다 자동으로 읽는 상시 규율(스택·보안·컨벤션·작업 방식).
 - **`review.md`** — 코드 리뷰 체크리스트. AI 1차 리뷰의 근거.
