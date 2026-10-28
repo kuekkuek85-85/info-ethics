@@ -23,7 +23,7 @@ React (Vite) · Google Gemini API · Firebase Firestore · Vercel · GitHub
 | 5. 생성 | 태스크 A(UI) → B(Gemini) → C(Firebase) |
 | 6. 검증 | 수용기준 대조 |
 | 7. 코드 리뷰 | AI 1차 + 사람 2차 |
-| 8. 되먹임 + 배포 | spec/CLAUDE.md 교정 → Vercel |
+| 8. 피드백 반영 + 배포 | spec/CLAUDE.md 교정 → Vercel |
 
 ## 하네스 파일
 - **`CLAUDE.md`** — Claude Code가 세션마다 자동으로 읽는 상시 규율(스택·보안·컨벤션·작업 방식).
