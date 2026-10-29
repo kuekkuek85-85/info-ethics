@@ -109,3 +109,27 @@ button:disabled {
 .result .grade {
   margin: 0 0 6px;
 }
+
+.counter {
+  font-weight: 400;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.loading {
+  margin-top: 16px;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.result.error-box {
+  border-color: #f3c3bd;
+  background: #fdf2f1;
+}
+
+button.ghost {
+  margin-top: 12px;
+  background: transparent;
+  color: #2563eb;
+  border: 1px solid #c3d4f5;
+}

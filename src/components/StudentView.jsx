@@ -1,16 +1,18 @@
 import { useState } from 'react'
 import { SCENARIO } from '../data/scenario.js'
+import { useEvaluation } from '../hooks/useEvaluation.js'
 
-// 학생 제출 화면 (태스크 A: UI만).
-// Gemini 평가·Firestore 저장은 아직 연동하지 않는다 (태스크 B·C에서 추가).
+const MAX_OPINION = 1000 // 과도한 입력 방지 (A 리뷰 피드백 반영: Gemini 토큰·비용 보호)
+
+// 학생 제출 화면. 제출 시 Gemini로 의견을 평가한다 (저장은 태스크 C).
 export default function StudentView() {
   const [studentId, setStudentId] = useState('')
   const [opinion, setOpinion] = useState('')
   const [notice, setNotice] = useState('') // 빈 의견 등 입력 안내
-  const [result, setResult] = useState(null) // 평가 결과 (B에서 실제 채움)
+  const { status, result, error, evaluate, reset } = useEvaluation()
 
   // 학번이 비면 제출 불가 (수용기준: 제출 버튼 비활성화)
-  const canSubmit = studentId.trim().length > 0
+  const canSubmit = studentId.trim().length > 0 && status !== 'loading'
 
   function handleSubmit(event) {
     event.preventDefault()
@@ -22,13 +24,7 @@ export default function StudentView() {
       return
     }
 
-    // 태스크 A에서는 평가 연동이 없으므로 자리표시 결과만 보여준다.
-    // (태스크 B에서 이 자리에 Gemini 평가 결과가 들어온다.)
-    setResult({
-      grade: '—',
-      feedback: '평가 기능은 다음 단계(Gemini 연동)에서 동작합니다.',
-      stub: true,
-    })
+    evaluate(opinion.trim())
   }
 
   return (
@@ -58,11 +54,14 @@ export default function StudentView() {
         </section>
 
         <label className="field">
-          <span className="field-label">내 의견</span>
+          <span className="field-label">
+            내 의견 <span className="counter">{opinion.length}/{MAX_OPINION}</span>
+          </span>
           <textarea
             value={opinion}
             onChange={(e) => setOpinion(e.target.value)}
             rows={8}
+            maxLength={MAX_OPINION}
             placeholder="입장을 밝히고, 그 근거를 서술하세요."
           />
         </label>
@@ -70,18 +69,34 @@ export default function StudentView() {
         {notice && <p className="notice" role="alert">{notice}</p>}
 
         <button type="submit" disabled={!canSubmit}>
-          제출
+          {status === 'loading' ? '평가 중…' : '제출'}
         </button>
-        {!canSubmit && (
+        {studentId.trim().length === 0 && (
           <p className="hint">학번을 입력하면 제출할 수 있습니다.</p>
         )}
       </form>
 
-      {result && (
+      {status === 'loading' && (
+        <p className="loading" role="status">AI가 의견을 평가하고 있습니다…</p>
+      )}
+
+      {status === 'error' && (
+        <section className="result error-box" aria-label="평가 오류">
+          <p className="notice" role="alert">{error}</p>
+          <button type="button" onClick={() => evaluate(opinion.trim())}>
+            재시도
+          </button>
+        </section>
+      )}
+
+      {status === 'done' && result && (
         <section className="result" aria-label="평가 결과">
           <h2>평가 결과</h2>
           <p className="grade">등급: <strong>{result.grade}</strong></p>
           <p className="feedback">{result.feedback}</p>
+          <button type="button" className="ghost" onClick={reset}>
+            다시 쓰기
+          </button>
         </section>
       )}
     </main>
