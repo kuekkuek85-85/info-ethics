@@ -1,0 +1,24 @@
+{
+  "name": "info-ethics-eval",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "정보윤리 단원 서술형 평가 도구 (연수용 완성 레포)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "firebase": "^11.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "4.3.4",
+    "vite": "5.4.11",
+    "vitest": "2.1.8"
+  }
+}
