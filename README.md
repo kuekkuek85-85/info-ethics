@@ -54,6 +54,8 @@ React (Vite) · Google Gemini API · Firebase Firestore · Vercel · GitHub
 
 GitHub에 push하면 Vercel이 자동 배포한다. `vercel.json`에 빌드 설정(Vite·`npm run build`·`dist`)이 있다.
 
+0. **Production 브랜치 지정**: 프로젝트 → **Environments → Branch Tracking**에서 Production이
+   추적할 브랜치를 `main`으로. (이러면 `main`=Production, 나머지 브랜치=Preview)
 1. **레포 연결**: Vercel에서 **New Project → 이 GitHub 레포 import** (프레임워크는 Vite 자동 인식).
 2. **환경변수 등록** (Project → Settings → Environment Variables): `.env`의 값을 그대로 등록.
    - `VITE_GEMINI_API_KEY`
