@@ -2,6 +2,7 @@
 // API 키는 환경변수(VITE_GEMINI_API_KEY)로만 다룬다.
 import { SCENARIO } from '../data/scenario.js'
 import { parseEvaluation, VALID_GRADES } from './parseEvaluation.js'
+import { anonymizeForLLM } from './anonymize.js'
 
 const MODEL = 'gemini-flash-latest' // 교체 가능. 루브릭 채점엔 flash로 충분.
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
@@ -50,13 +51,16 @@ export async function requestEvaluation(opinion) {
     throw err
   }
 
+  // 외부 전송 전 익명화. 학번은 애초에 보내지 않고, 의견 본문의 식별정보만 가린다.
+  const safeOpinion = anonymizeForLLM(opinion)
+
   let response
   try {
     response = await fetch(`${ENDPOINT}?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: buildPrompt(opinion) }] }],
+        contents: [{ parts: [{ text: buildPrompt(safeOpinion) }] }],
         generationConfig: {
           responseMimeType: 'application/json',
           responseSchema: RESPONSE_SCHEMA,

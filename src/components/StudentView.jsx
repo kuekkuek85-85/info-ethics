@@ -68,6 +68,11 @@ export default function StudentView() {
 
         {notice && <p className="notice" role="alert">{notice}</p>}
 
+        <p className="privacy-notice">
+          제출한 의견은 AI 채점을 위해 외부(Google Gemini)로 전송됩니다.
+          이름·연락처 등 개인정보는 쓰지 마세요. (학번은 전송되지 않습니다)
+        </p>
+
         <button type="submit" disabled={!canSubmit}>
           {status === 'loading' ? '평가 중…' : '제출'}
         </button>
