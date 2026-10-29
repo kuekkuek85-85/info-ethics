@@ -50,6 +50,22 @@ React (Vite) · Google Gemini API · Firebase Firestore · Vercel · GitHub
   전송 전 `src/lib/anonymize.js`로 연락처·이메일·학번류 숫자를 마스킹하고, **학번은 전송하지 않는다.**
   화면에도 전송 고지를 둔다. (완전 익명화는 불가 — 자유서술 속 이름 등은 고지로 보완.)
 
+## 배포 (Vercel)
+
+GitHub에 push하면 Vercel이 자동 배포한다. `vercel.json`에 빌드 설정(Vite·`npm run build`·`dist`)이 있다.
+
+1. **레포 연결**: Vercel에서 **New Project → 이 GitHub 레포 import** (프레임워크는 Vite 자동 인식).
+2. **환경변수 등록** (Project → Settings → Environment Variables): `.env`의 값을 그대로 등록.
+   - `VITE_GEMINI_API_KEY`
+   - `VITE_FIREBASE_API_KEY` / `VITE_FIREBASE_AUTH_DOMAIN` / `VITE_FIREBASE_PROJECT_ID`
+   - `VITE_FIREBASE_STORAGE_BUCKET` / `VITE_FIREBASE_MESSAGING_SENDER_ID` / `VITE_FIREBASE_APP_ID`
+   > `.env`는 커밋되지 않으므로, Vercel에는 **직접 등록**해야 한다. (등록 후 재배포)
+3. **배포**: Deploy → 발급된 URL로 접속. 교사 화면은 `URL/#teacher`.
+
+> ⚠️ **공개 배포 주의:** 현재 데모 설정은 (a) `VITE_` 키가 번들에 노출되고 (b) Firestore
+> `read:true`라 **저장된 제출을 누구나 조회**할 수 있다. 공개 URL로 배포하면 실제 노출되므로,
+> 실제 교실 투입 전에는 인증 기반 규칙·서버리스 프록시로 닫아야 한다. (리뷰_로그 Round 4 참조)
+
 ## 하네스 파일
 - **`CLAUDE.md`** — Claude Code가 세션마다 자동으로 읽는 상시 규율(스택·보안·컨벤션·작업 방식).
 - **`review.md`** — 코드 리뷰 체크리스트. AI 1차 리뷰의 근거.
