@@ -143,3 +143,57 @@ button.ghost {
   padding: 8px 10px;
   border-radius: 4px;
 }
+
+.topbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.switch {
+  font-size: 0.9rem;
+  color: #2563eb;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.save-notice {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  color: #92700a;
+}
+
+.teacher-note {
+  font-size: 0.82rem;
+  color: #6b7280;
+  background: #fff8e6;
+  border-left: 3px solid #f0c33c;
+  padding: 8px 10px;
+  border-radius: 4px;
+}
+
+.submissions {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.submissions th,
+.submissions td {
+  border: 1px solid #e3e6ea;
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.submissions th {
+  background: #f1f4f8;
+}
+
+.opinion-cell,
+.feedback-cell {
+  max-width: 220px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

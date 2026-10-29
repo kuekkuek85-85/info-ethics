@@ -9,7 +9,7 @@ export default function StudentView() {
   const [studentId, setStudentId] = useState('')
   const [opinion, setOpinion] = useState('')
   const [notice, setNotice] = useState('') // 빈 의견 등 입력 안내
-  const { status, result, error, evaluate, reset } = useEvaluation()
+  const { status, result, error, saveNotice, evaluate, reset } = useEvaluation()
 
   // 학번이 비면 제출 불가 (수용기준: 제출 버튼 비활성화)
   const canSubmit = studentId.trim().length > 0 && status !== 'loading'
@@ -24,12 +24,15 @@ export default function StudentView() {
       return
     }
 
-    evaluate(opinion.trim())
+    evaluate(studentId.trim(), opinion.trim())
   }
 
   return (
     <main className="card">
-      <h1>정보윤리 서술형 평가</h1>
+      <div className="topbar">
+        <h1>정보윤리 서술형 평가</h1>
+        <a className="switch" href="#teacher">교사용 →</a>
+      </div>
 
       <form onSubmit={handleSubmit}>
         <label className="field">
@@ -88,7 +91,7 @@ export default function StudentView() {
       {status === 'error' && (
         <section className="result error-box" aria-label="평가 오류">
           <p className="notice" role="alert">{error}</p>
-          <button type="button" onClick={() => evaluate(opinion.trim())}>
+          <button type="button" onClick={() => evaluate(studentId.trim(), opinion.trim())}>
             재시도
           </button>
         </section>
@@ -99,6 +102,7 @@ export default function StudentView() {
           <h2>평가 결과</h2>
           <p className="grade">등급: <strong>{result.grade}</strong></p>
           <p className="feedback">{result.feedback}</p>
+          {saveNotice && <p className="save-notice">{saveNotice}</p>}
           <button type="button" className="ghost" onClick={reset}>
             다시 쓰기
           </button>

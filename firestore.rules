@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// 정보윤리 평가 도구 — Firestore 보안 규칙 (spec.md ② 접근 권한 모델 구현)
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /submissions/{id} {
+
+      // 생성(create): 필수 필드가 모두 있고, 등급이 루브릭(상/중/하) 중 하나일 때만.
+      allow create: if request.resource.data.keys().hasAll(['학번','의견','등급','피드백','제출시각'])
+                    && request.resource.data.등급 in ['상','중','하'];
+
+      // 읽기(read): (의도) 교사만 전체 조회 / 학생은 본인 제출만.
+      //   ⚠️ 인증(역할 식별)이 현재 범위 밖이라, 아래는 데모용으로 열어둔 상태다.
+      //   실제 적용 시 Firebase Auth 기반으로 교체해야 한다. 예시:
+      //     allow read: if isTeacher()
+      //                 || (isStudent() && resource.data.학번 == myStudentId());
+      //   (리뷰_로그.md Round 3 / 피드백 로그 '역할 식별 미결정' 참조)
+      allow read: if true; // ← DEMO ONLY. 반드시 인증 기반으로 교체.
+
+      // 수정·삭제: 금지 (필요 시 교사 정책으로만 개방)
+      allow update, delete: if false;
+    }
+  }
+}
